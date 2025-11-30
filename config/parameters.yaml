@@ -1,0 +1,41 @@
+data:
+  file_path: "data/forestfires_classification.csv"
+  test_size: 0.2
+  val_size: 0.25
+  random_state: 42
+
+preprocessing:
+  categorical_features: ['month', 'day']
+  numerical_features: ['X', 'Y', 'FFMC', 'DMC', 'DC', 'ISI', 'temp', 'RH', 'wind', 'rain']
+  target_column: 'area'
+  binary_threshold: 4.0
+
+feature_engineering:
+  create_interactions: true
+  polynomial_degree: 2
+  temporal_features: true
+
+models:
+  random_forest:
+    n_estimators: [100, 200, 300]
+    max_depth: [10, 20, null]
+    min_samples_split: [2, 5, 10]
+    min_samples_leaf: [1, 2, 4]
+    class_weight: ['balanced']
+
+  svm:
+    C: [0.1, 1, 10, 100]
+    gamma: ['scale', 'auto', 0.1, 0.01]
+    kernel: ['rbf', 'linear']
+    class_weight: ['balanced']
+
+  neural_network:
+    hidden_layer_sizes: [(50,), (100,), (50, 50), (100, 50)]
+    activation: ['relu', 'tanh']
+    alpha: [0.0001, 0.001, 0.01]
+    learning_rate: ['constant', 'adaptive']
+
+evaluation:
+  cv_folds: 5
+  scoring_metric: 'f1'
+  metrics: ['accuracy', 'precision', 'recall', 'f1', 'roc_auc']
